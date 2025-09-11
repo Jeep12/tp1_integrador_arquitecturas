@@ -1,4 +1,4 @@
-package com.ak4n1.utils;
+package com.ak4n1.util;
 
 import com.ak4n1.entity.*;
 import org.apache.commons.csv.CSVFormat;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class CSVDataLoader {
+public class CSVDataLoaderMariaDB {
     
     private static final String PERSISTENCE_UNIT_NAME = "TP1";
     private EntityManagerFactory emf;
@@ -26,7 +26,7 @@ public class CSVDataLoader {
     private Map<Integer, Factura> facturasMap = new HashMap<>();
     
     public static void main(String[] args) {
-        CSVDataLoader loader = new CSVDataLoader();
+        CSVDataLoaderMariaDB loader = new CSVDataLoaderMariaDB();
         try {
             loader.initialize();
             loader.loadAllData();

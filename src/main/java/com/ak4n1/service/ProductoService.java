@@ -1,4 +1,4 @@
-package com.ak4n1.services;
+package com.ak4n1.service;
 
 import com.ak4n1.entity.Producto;
 

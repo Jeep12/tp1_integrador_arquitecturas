@@ -1,4 +1,4 @@
-package com.ak4n1.utils;
+package com.ak4n1.util;
 
 import com.ak4n1.entity.Cliente;
 

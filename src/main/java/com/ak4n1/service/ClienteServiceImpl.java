@@ -1,19 +1,34 @@
-package com.ak4n1.services;
+package com.ak4n1.service;
 
-import com.ak4n1.DAO.FacturaProductoDAO;
-import com.ak4n1.DAO.FacturaProductoDAOMariaDB;
+import com.ak4n1.dao.FacturaProductoDAO;
+import com.ak4n1.dao.FacturaProductoDAOMariaDB;
 import com.ak4n1.entity.Factura_Producto;
-import com.ak4n1.utils.ClienteFacturacion;
+import com.ak4n1.factory.DAOFactory;
+import com.ak4n1.util.ClienteFacturacion;
+import com.ak4n1.util.TipoBaseDeDatos;
 
 import java.util.*;
 
 public class ClienteServiceImpl implements ClienteService {
 
+    private static ClienteService instance;
+
     private final FacturaProductoDAO facturaProductoDAO;
 
-    public ClienteServiceImpl() {
-        this.facturaProductoDAO = new FacturaProductoDAOMariaDB();
+    private final static TipoBaseDeDatos tipoBD = TipoBaseDeDatos.DERBY;
+
+
+    private ClienteServiceImpl() {
+        DAOFactory factory = DAOFactory.getFactory(tipoBD);
+        this.facturaProductoDAO = factory.createFacturaProductoDAO();    }
+
+    public static ClienteService getInstance() {
+        if (instance == null) {
+            instance = new ClienteServiceImpl();
+        }
+        return instance;
     }
+
 
     @Override
     public List<ClienteFacturacion> getClientesPorFacturacion1() {
@@ -23,7 +38,7 @@ public class ClienteServiceImpl implements ClienteService {
         List<Factura_Producto> ventas = facturaProductoDAO.getAllFacturasProductos();
         if (ventas.isEmpty()) return Collections.emptyList();
 
-        //La clave del map es el id del  cliente
+        //La clave del map es el id del cliente
         Map<Integer, ClienteFacturacion> clienteMap = new HashMap<>();
 
         //recorremos todos los registros de facturas_productos
