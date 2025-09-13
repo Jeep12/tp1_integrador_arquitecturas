@@ -1,57 +1,25 @@
 package com.ak4n1;
 
-
 import com.ak4n1.service.ClienteService;
 import com.ak4n1.service.ClienteServiceImpl;
 import com.ak4n1.service.ProductoService;
 import com.ak4n1.service.ProductoServiceImpl;
 import com.ak4n1.util.CSVDataLoaderMariaDB;
-
+import com.ak4n1.util.CargarDatos;
 
 public class Main {
-    public static void main(String[] args) {
+  public static void main(String[] args) {
 
-        /*
-         Cargar datos en mariadb desde los csv
-        try {
-            CSVDataLoaderMariaDB dataLoader = new CSVDataLoaderMariaDB();
-            dataLoader.initialize();
-            dataLoader.loadAllData();
-            dataLoader.close();
+    // CargarDatos.cargarApacheDerby();
+    // CargarDatos.cargarMariaDB();
 
+    ProductoService ps = ProductoServiceImpl.getInstance();
+    ClienteService cs = ClienteServiceImpl.getInstance();
 
-        } catch (Exception e) {
-            System.err.println("Error durante la carga de datos: " + e.getMessage());
-            e.printStackTrace();
-        }
+    System.out.println("Producto que más recaudó:");
+    System.out.println(ps.getProductoQueMasRecaudoJPQL());
+    System.out.println(" \n\n\n Clientes por facturación:");
+    System.out.println(cs.getClientesPorFacturacionJQPL());
 
-
-
-         Cargar datos en apache derby desde los csv
-
-        CSVDataLoaderDerby loader = new CSVDataLoaderDerby();
-        try {
-            loader.initialize();
-            loader.loadAllData();
-            System.out.println("datos cargados");
-        } catch (Exception e) {
-            System.err.println("error al cargar los datos");
-            e.printStackTrace();
-        } finally {
-            loader.close();
-        }
-         */
-
-
-        ProductoService ps = ProductoServiceImpl.getInstance();
-
-        System.out.println(ps.getProductoQueMasRecaudo());
-
-
-        ClienteService cs = ClienteServiceImpl.getInstance();
-
-        System.out.println(cs.getClientesPorFacturacion1());
-
-
-    }
+  }
 }

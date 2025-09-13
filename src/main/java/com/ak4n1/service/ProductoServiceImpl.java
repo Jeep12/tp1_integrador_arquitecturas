@@ -17,7 +17,7 @@ public class ProductoServiceImpl implements ProductoService {
 
     private static ProductoService instance;
 
-    private final static TipoBaseDeDatos tipoBD = TipoBaseDeDatos.DERBY;
+    private final static TipoBaseDeDatos tipoBD = TipoBaseDeDatos.MARIADB;
 
     private ProductoServiceImpl() {
         DAOFactory factory = DAOFactory.getFactory(tipoBD);
@@ -34,10 +34,7 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public Producto getProductoQueMasRecaudo() {
         List<Factura_Producto> ventas = facturaProductoDAO.getAllFacturasProductos();
-        System.out.println("DEBUG: Número de ventas encontradas: " + ventas.size());
-        System.out.println("DEBUG: Usando BD: " + tipoBD);
         if (ventas.isEmpty()) {
-            System.out.println("DEBUG: No se encontraron ventas, devolviendo null");
             return null;
         }
 
@@ -82,6 +79,11 @@ public class ProductoServiceImpl implements ProductoService {
         this.close();
 
         return productoTop;
+    }
+
+    @Override
+    public Producto getProductoQueMasRecaudoJPQL() {
+        return facturaProductoDAO.getProductoQueMasRecaudoJQPL();
     }
 
     @Override

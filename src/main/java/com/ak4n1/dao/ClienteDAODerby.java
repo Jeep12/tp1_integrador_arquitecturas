@@ -1,6 +1,7 @@
 package com.ak4n1.dao;
 
 import com.ak4n1.entity.Cliente;
+import com.ak4n1.util.ClienteFacturacion;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -21,6 +22,20 @@ public class ClienteDAODerby implements ClienteDAO {
     public List<Cliente> getAllClientes() {
         return em.createQuery("SELECT c FROM Cliente c", Cliente.class)
                 .getResultList();
+    }
+
+    @Override
+    public List<ClienteFacturacion> getClientesPorFacturacionJQPL() {
+        return em.createQuery(
+            "SELECT NEW com.ak4n1.util.ClienteFacturacion(c, SUM(fp.cantidad * p.valor)) " +
+            "FROM Cliente c " +
+            "JOIN c.facturas f " +
+            "JOIN Factura_Producto fp ON fp.factura = f " +
+            "JOIN fp.producto p " +
+            "GROUP BY c.idCliente, c.nombre, c.email " +
+            "ORDER BY SUM(fp.cantidad * p.valor) DESC", 
+            ClienteFacturacion.class
+        ).getResultList();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.ak4n1.dao;
 
 import com.ak4n1.entity.Factura_Producto;
+import com.ak4n1.entity.Producto;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -28,9 +29,26 @@ public class FacturaProductoDAODerby implements FacturaProductoDAO {
         em.close();
         emf.close();
     }
+
+
+    @Override
+    public Producto getProductoQueMasRecaudoJQPL() {
+        try {
+            return em.createQuery(
+                            "SELECT p FROM Producto p " +
+                                    "JOIN Factura_Producto fp ON fp.producto = p " +
+                                    "GROUP BY p.idProducto, p.nombre, p.valor " +
+                                    "ORDER BY SUM(fp.cantidad * p.valor) DESC",
+                            Producto.class
+                    ).setMaxResults(1)
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }
 /*
-Posible consulta sql.
+consulta sql nativa.
 
 select  f.idCliente ,fp.cantidad, p.valor, p.nombre, sum(fp.cantidad * p.valor) as recaudacion  from facturas_productos fp
 inner join facturas f

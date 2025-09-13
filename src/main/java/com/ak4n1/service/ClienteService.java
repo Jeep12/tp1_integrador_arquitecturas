@@ -8,7 +8,7 @@ public interface ClienteService {
 
     void close();
 
-    List<ClienteFacturacion> getClientesPorFacturacion1();
-
+    List<ClienteFacturacion> getClientesPorFacturacion();
+    List<ClienteFacturacion> getClientesPorFacturacionJQPL();
 
 }

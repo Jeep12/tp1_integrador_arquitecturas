@@ -1,7 +1,7 @@
 package com.ak4n1.service;
 
+import com.ak4n1.dao.ClienteDAO;
 import com.ak4n1.dao.FacturaProductoDAO;
-import com.ak4n1.dao.FacturaProductoDAOMariaDB;
 import com.ak4n1.entity.Factura_Producto;
 import com.ak4n1.factory.DAOFactory;
 import com.ak4n1.util.ClienteFacturacion;
@@ -14,13 +14,16 @@ public class ClienteServiceImpl implements ClienteService {
     private static ClienteService instance;
 
     private final FacturaProductoDAO facturaProductoDAO;
+    private final ClienteDAO clienteDAO;
 
     private final static TipoBaseDeDatos tipoBD = TipoBaseDeDatos.DERBY;
 
 
     private ClienteServiceImpl() {
         DAOFactory factory = DAOFactory.getFactory(tipoBD);
-        this.facturaProductoDAO = factory.createFacturaProductoDAO();    }
+        this.facturaProductoDAO = factory.createFacturaProductoDAO();
+        this.clienteDAO = factory.createClienteDAO();
+    }
 
     public static ClienteService getInstance() {
         if (instance == null) {
@@ -31,7 +34,7 @@ public class ClienteServiceImpl implements ClienteService {
 
 
     @Override
-    public List<ClienteFacturacion> getClientesPorFacturacion1() {
+    public List<ClienteFacturacion> getClientesPorFacturacion() {
 
 
 
@@ -43,7 +46,7 @@ public class ClienteServiceImpl implements ClienteService {
 
         //recorremos todos los registros de facturas_productos
         for (Factura_Producto fp : ventas) {
-            //Guardamos el id del cliente
+            //guardamos el id del cliente (esto es posible porque tenemos una relacion bidireccional)
             Integer idCliente = fp.getFactura().getCliente().getIdCliente();
             //guardamos el total de la venta
             double totalVenta = fp.getCantidad() * fp.getProducto().getValor();
@@ -68,7 +71,13 @@ public class ClienteServiceImpl implements ClienteService {
 
 
     @Override
+    public List<ClienteFacturacion> getClientesPorFacturacionJQPL() {
+        return clienteDAO.getClientesPorFacturacionJQPL();
+    }
+
+    @Override
     public void close() {
         facturaProductoDAO.close();
+        clienteDAO.close();
     }
 }

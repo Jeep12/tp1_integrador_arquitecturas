@@ -5,7 +5,7 @@
                                  http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
              version="2.2">
 
-    <persistence-unit name="TP1" transaction-type="RESOURCE_LOCAL">
+    <persistence-unit name="TP1_MariaDB" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
         <class>com.ak4n1.entitys.Cliente</class>
@@ -37,8 +37,6 @@
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:derby:C:/Users/JeeP_/OneDrive/Escritorio/Tudai/Arquitecturas Web/TP1_INTEGRADOR/TP1_INTEGRADOR/derbyDB"/>
-            <property name="javax.persistence.jdbc.user" value=""/>
-            <property name="javax.persistence.jdbc.password" value=""/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.DerbyDialect"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.show_sql" value="false"/>

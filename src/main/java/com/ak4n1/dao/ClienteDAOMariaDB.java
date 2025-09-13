@@ -1,6 +1,7 @@
 package com.ak4n1.dao;
 
 import com.ak4n1.entity.Cliente;
+import com.ak4n1.util.ClienteFacturacion;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -13,7 +14,7 @@ public class ClienteDAOMariaDB implements ClienteDAO {
     private EntityManager em;
 
     public ClienteDAOMariaDB() {
-        this.emf = Persistence.createEntityManagerFactory("TP1");
+        this.emf = Persistence.createEntityManagerFactory("TP1_MariaDB");
         this.em = emf.createEntityManager();
     }
 
@@ -24,13 +25,27 @@ public class ClienteDAOMariaDB implements ClienteDAO {
     }
 
     @Override
+    public List<ClienteFacturacion> getClientesPorFacturacionJQPL() {
+        return em.createQuery(
+            "SELECT NEW com.ak4n1.util.ClienteFacturacion(c, SUM(fp.cantidad * p.valor)) " +
+            "FROM Cliente c " +
+            "JOIN c.facturas f " +
+            "JOIN Factura_Producto fp ON fp.factura = f " +
+            "JOIN fp.producto p " +
+            "GROUP BY c.idCliente, c.nombre, c.email " +
+            "ORDER BY SUM(fp.cantidad * p.valor) DESC", 
+            ClienteFacturacion.class
+        ).getResultList();
+    }
+
+    @Override
     public void close() {
         em.close();
         emf.close();
     }
 }
 /*
-posible consulta sql.
+Consulta sql nativa.
         SELECT
         c.idCliente,
         c.nombre,
